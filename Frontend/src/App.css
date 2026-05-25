@@ -1,0 +1,136 @@
+* {
+  margin: 0%;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  height: 100%;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  
+}
+
+main .left,
+main .right {
+  height: 100%;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 0.7rem;
+}
+
+main .left {
+  background-color: #000000;
+  position: relative;
+}
+
+.left .code,
+.code pre,
+.code pre code {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  border-radius: 0.7rem;
+  background-color: #0c0c0c;
+}
+
+main .left .review {
+  position: absolute;
+  bottom: 1rem;
+  right: 6rem;
+  background-color: rgb(219, 219, 255);
+  color: #000000;
+  padding: 0.5rem 2rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0.7rem;
+}
+
+
+main .right {
+  background-color: #343434;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  overflow: auto;
+  position: relative;
+  
+}
+main .right .ai pre {
+  white-space: pre-wrap;  /* ✅ pre tag में भी wrap होगा */
+  word-break: break-word;
+}
+main .right .ai {
+  max-width: 700px;
+  margin: 0;
+  word-wrap: break-word;    /* ✅ लंबे words wrap होंगे */
+  word-break: break-word;   /* ✅ बहुत लंबे words break होंगे */
+  white-space: pre-wrap;    /* ✅ newlines और wrap दोनों काम करेंगे */
+  line-height: 1.6;
+}
+
+/* Resizer Bar */
+.resizer {
+ width: 8px;
+  margin: 0 0.5rem; 
+  background-color: #444;
+  cursor: col-resize;
+  border-radius: 4px;
+  flex-shrink: 0; 
+  transition: background-color 0.2s;
+}
+
+.resizer:hover {
+  background-color: #888; 
+}
+
+main .right .ai h1,
+main .right .ai h2,
+main .right .ai h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+main .right .ai p {
+  margin-bottom: 0.8rem;
+  line-height: 1.6;
+}
+
+main .right .ai code {
+  background-color: #0c0c0c;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  color: #f8f8f2;
+}
+
+main .right .ai pre {
+  background-color: #0c0c0c;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+main .right .ai ul,
+main .right .ai ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+main .right .ai li {
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+
+main .right .ai strong {
+  color: #ddbfff;
+}
