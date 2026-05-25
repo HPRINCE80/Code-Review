@@ -111,7 +111,7 @@ function App() {
     setReviewResult('');
     setLoading(true);
     try {
-      const response = await axios.post('https://code-review-v9sh.onrender.com', { code });
+      const response = await axios.post('https://code-review-v9sh.onrender.com/ai/review', { code });
       setReviewResult(response.data.review || 'No review returned.');
     } catch (err) {
       setError(err?.response?.data?.error || 'Unable to fetch review.');
