@@ -1,167 +1,170 @@
-// import { useState } from 'react';
-// import './App.css';
-// import Editor from '@monaco-editor/react';
-// import axios from 'axios';
-
-// function App() {
-//   const [code, setCode] = useState(`function App() {\n  return 1+1;\n}`);
-//   const [reviewResult, setReviewResult] = useState('');
-//   const [error, setError] = useState('');
-//   const [loading, setLoading] = useState(false);
-
-//   async function reviewCode() {
-//     setError('');
-//     setReviewResult('');
-//     setLoading(true);
-
-//     try {
-//       const response = await axios.post('http://localhost:5000/ai/review', { code });
-//       setReviewResult(response.data.review || 'No review returned.');
-//     } catch (err) {
-//       console.error('Review request failed:', err);
-//       setError(err?.response?.data?.error || 'Unable to fetch review.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   }
-
-//   return (
-//     <>
-//       <main>
-//         <div className='left'>
-//           <div className="code">
-//             <Editor
-//               value={code}
-//               onChange={(value) => setCode(value || '')}
-//               language="javascript"
-//               theme="vs-dark"
-//               height="100%"
-//               options={{
-//                 fontSize: 14,
-//                 minimap: { enabled: false },
-//                 scrollBeyondLastLine: false,
-//               }}
-//             />
-//           </div>
-//           <button className="review" onClick={reviewCode} disabled={loading}>
-//             {loading ? 'Reviewing…' : 'Review'}
-//           </button>
-//         </div>
-//         <div className='right'>
-//           <div className="ai">
-//             {error && <div className="error">{error}</div>}
-//             {!error && loading && <div>Loading review...</div>}
-//             {!error && !loading && reviewResult && (
-//               <pre>{reviewResult}</pre>
-//             )}
-//             {!error && !loading && !reviewResult && (
-//               <div>Click Review to get AI feedback here.</div>
-//             )}
-//           </div>
-//         </div>
-//       </main>
-//     </>
-//   );
-// }
-
-// export default App;
-
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import Markdown from 'react-markdown';
 
 function App() {
-  const [code, setCode] = useState(`function App() {\n  return 1+1;\n}`);
+  const [code, setCode] = useState(`function App() {
+  return 1+1;
+}`);
+
   const [reviewResult, setReviewResult] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [leftWidth, setLeftWidth] = useState(50); // ✅ width % में
+
+  const [leftWidth, setLeftWidth] = useState(50);
   const isResizing = useRef(false);
 
-  // ✅ Mouse drag logic
+  // Start resizing
   function handleMouseDown() {
     isResizing.current = true;
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
   }
 
+  // Resize panels
   function handleMouseMove(e) {
     if (!isResizing.current) return;
+
     const totalWidth = window.innerWidth;
     const newLeftWidth = (e.clientX / totalWidth) * 100;
 
-    // ✅ Min 20% Max 80% limit
     if (newLeftWidth >= 20 && newLeftWidth <= 80) {
       setLeftWidth(newLeftWidth);
     }
   }
 
+  // Stop resizing
   function handleMouseUp() {
     isResizing.current = false;
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
   }
+
+  // Add/remove resize listeners
+  useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
 
   async function reviewCode() {
     setError('');
     setReviewResult('');
     setLoading(true);
+
     try {
-      const response = await axios.post('https://code-review-v9sh.onrender.com/ai/review', { code });
-      setReviewResult(response.data.review || 'No review returned.');
+      const response = await axios.post(
+        'https://code-review-v9sh.onrender.com/ai/review',
+        { code }
+      );
+
+      setReviewResult(
+        response.data.review || 'No review returned.'
+      );
     } catch (err) {
-      setError(err?.response?.data?.error || 'Unable to fetch review.');
+      console.error(err);
+
+      setError(
+        err?.response?.data?.error ||
+        'Unable to fetch review.'
+      );
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <>
-      <main>
-        {/* Left Panel */}
-        <div className='left' style={{ flexBasis: `${leftWidth}%` }}>
-          <div className="code">
-            <Editor
-              value={code}
-              onChange={(value) => setCode(value || '')}
-              language="javascript"
-              theme="vs-dark"
-              height="100%"
-              options={{
-                fontSize: 14,
-                minimap: { enabled: false },
-                scrollBeyondLastLine: false,
-              }}
-            />
-          </div>
-          <button className="review" onClick={reviewCode} disabled={loading}>
-            {loading ? 'Reviewing…' : 'Review'}
-          </button>
+    <main className="app">
+
+      {/* LEFT - CODE EDITOR */}
+      <section
+        className="left"
+        style={{ '--left-width': `${leftWidth}%` }}
+      >
+        <div className="code">
+          <Editor
+            value={code}
+            onChange={(value) => setCode(value || '')}
+            language="javascript"
+            theme="vs-dark"
+            height="100%"
+            options={{
+              fontSize: 14,
+              minimap: {
+                enabled: false,
+              },
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+              wordWrap: 'on',
+            }}
+          />
         </div>
 
-        {/* ✅ Resizer Bar */}
-        <div className="resizer" onMouseDown={handleMouseDown}></div>
+        <button
+          className="review"
+          onClick={reviewCode}
+          disabled={loading}
+        >
+          {loading ? 'Reviewing…' : 'Review Code'}
+        </button>
+      </section>
 
-        {/* Right Panel */}
-        <div className='right' style={{ flexBasis: `${100 - leftWidth}%` }}>
-          <div className="ai">
-            {error && <div className="error">{error}</div>}
-            {!error && loading && <div>Loading review...</div>}
-            {!error && !loading && reviewResult && (
-              <ReactMarkdown>{reviewResult}</ReactMarkdown>
-            )}
-            {!error && !loading && reviewResult && <pre>{reviewResult}</pre>}
-            {!error && !loading && !reviewResult && <div>Click Review to get AI feedback here.</div>}
-          </div>
+      {/* DESKTOP RESIZER */}
+      <div
+        className="resizer"
+        onMouseDown={handleMouseDown}
+      />
+
+      {/* RIGHT - AI REVIEW */}
+      <section
+        className="right"
+        style={{ '--right-width': `${100 - leftWidth}%` }}
+      >
+        <div className="ai">
+
+          {error && (
+            <div className="error">
+              {error}
+            </div>
+          )}
+
+          {!error && loading && (
+            <div className="loading">
+              <div className="spinner"></div>
+              <span>Analyzing your code...</span>
+            </div>
+          )}
+
+          {!error && !loading && reviewResult && (
+            <div className="markdown">
+              <ReactMarkdown>
+                {reviewResult}
+              </ReactMarkdown>
+            </div>
+          )}
+
+          {!error && !loading && !reviewResult && (
+            <div className="empty">
+              <div className="empty-icon">🤖</div>
+              <h2>AI Code Review</h2>
+              <p>
+                Write your code and click
+                <strong> Review Code </strong>
+                to get AI feedback.
+              </p>
+            </div>
+          )}
 
         </div>
-      </main>
-    </>
+      </section>
+
+    </main>
   );
 }
 

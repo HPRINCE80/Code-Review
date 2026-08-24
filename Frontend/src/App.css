@@ -1,136 +1,407 @@
 * {
-  margin: 0%;
-  padding: 0%;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
 body,
 #root {
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
-main {
-  height: 100%;
+body {
+  background: #0f1117;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+}
+
+/* =========================
+   MAIN APP
+========================= */
+
+.app {
   width: 100%;
-  padding: 1.5rem;
+  height: 100vh;
   display: flex;
-  
+  overflow: hidden;
+  background: #0f1117;
 }
 
-main .left,
-main .right {
+/* =========================
+   LEFT PANEL
+========================= */
+
+.left {
+  flex: 0 0 var(--left-width);
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+}
+
+.code {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* =========================
+   REVIEW BUTTON
+========================= */
+
+.review {
+  width: calc(100% - 24px);
+  margin: 10px 12px 12px;
+  padding: 13px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #2563eb;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.review:hover {
+  background: #1d4ed8;
+}
+
+.review:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESIZER
+========================= */
+
+.resizer {
+  width: 5px;
   height: 100%;
   flex-shrink: 0;
-  overflow: hidden;
-  border-radius: 0.7rem;
-}
 
-main .left {
-  background-color: #000000;
-  position: relative;
-}
+  background: #2d3038;
 
-.left .code,
-.code pre,
-.code pre code {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  border-radius: 0.7rem;
-  background-color: #0c0c0c;
-}
-
-main .left .review {
-  position: absolute;
-  bottom: 1rem;
-  right: 6rem;
-  background-color: rgb(219, 219, 255);
-  color: #000000;
-  padding: 0.5rem 2rem;
-  font-weight: 500;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 0.7rem;
-}
-
-
-main .right {
-  background-color: #343434;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  overflow: auto;
-  position: relative;
-  
-}
-main .right .ai pre {
-  white-space: pre-wrap;  /* ✅ pre tag में भी wrap होगा */
-  word-break: break-word;
-}
-main .right .ai {
-  max-width: 700px;
-  margin: 0;
-  word-wrap: break-word;    /* ✅ लंबे words wrap होंगे */
-  word-break: break-word;   /* ✅ बहुत लंबे words break होंगे */
-  white-space: pre-wrap;    /* ✅ newlines और wrap दोनों काम करेंगे */
-  line-height: 1.6;
-}
-
-/* Resizer Bar */
-.resizer {
- width: 8px;
-  margin: 0 0.5rem; 
-  background-color: #444;
   cursor: col-resize;
-  border-radius: 4px;
-  flex-shrink: 0; 
-  transition: background-color 0.2s;
+
+  transition: background 0.2s;
 }
 
 .resizer:hover {
-  background-color: #888; 
+  background: #3b82f6;
 }
 
-main .right .ai h1,
-main .right .ai h2,
-main .right .ai h3 {
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.right {
+  flex: 0 0 var(--right-width);
+  min-width: 0;
+  height: 100%;
+
+  background: #111318;
+
+  overflow: hidden;
+}
+
+.ai {
+  width: 100%;
+  height: 100%;
+
+  padding: 24px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  line-height: 1.6;
+}
+
+/* =========================
+   MARKDOWN
+========================= */
+
+.markdown {
+  width: 100%;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  margin: 18px 0 10px;
   color: #ffffff;
-  margin-bottom: 0.5rem;
 }
 
-main .right .ai p {
-  margin-bottom: 0.8rem;
-  line-height: 1.6;
+.markdown p {
+  margin-bottom: 12px;
+  color: #d1d5db;
 }
 
-main .right .ai code {
-  background-color: #0c0c0c;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-family: 'Fira Code', monospace;
-  color: #f8f8f2;
+.markdown ul,
+.markdown ol {
+  padding-left: 22px;
+  margin-bottom: 15px;
 }
 
-main .right .ai pre {
-  background-color: #0c0c0c;
-  padding: 1rem;
-  border-radius: 0.5rem;
+.markdown li {
+  margin-bottom: 6px;
+}
+
+.markdown code {
+  background: #1f2937;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.markdown pre {
+  width: 100%;
+  max-width: 100%;
+
   overflow-x: auto;
-  margin-bottom: 1rem;
+
+  background: #0b0d11;
+  padding: 16px;
+
+  border-radius: 8px;
+  margin: 15px 0;
 }
 
-main .right .ai ul,
-main .right .ai ol {
-  padding-left: 1.5rem;
-  margin-bottom: 0.8rem;
+.markdown pre code {
+  background: transparent;
+  padding: 0;
 }
 
-main .right .ai li {
-  margin-bottom: 0.4rem;
-  line-height: 1.6;
+/* =========================
+   ERROR
+========================= */
+
+.error {
+  padding: 15px;
+
+  background: #3f1d1d;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+
+  color: #fca5a5;
+
+  overflow-wrap: anywhere;
 }
 
-main .right .ai strong {
-  color: #ddbfff;
+/* =========================
+   LOADING
+========================= */
+
+.loading {
+  min-height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  color: #9ca3af;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+
+  border: 3px solid #374151;
+  border-top-color: #3b82f6;
+
+  border-radius: 50%;
+
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty {
+  min-height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.empty h2 {
+  margin-bottom: 10px;
+}
+
+.empty p {
+  max-width: 400px;
+  color: #9ca3af;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+  .ai {
+    padding: 18px;
+  }
+
+  .review {
+    padding: 12px;
+  }
+
+  .markdown {
+    font-size: 14px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+  body {
+    overflow: auto;
+  }
+
+  .app {
+    height: auto;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: visible;
+  }
+
+  /* Code section */
+
+  .left {
+    flex: none !important;
+
+    width: 100%;
+    height: 55vh;
+
+    min-height: 350px;
+  }
+
+  .code {
+    height: calc(100% - 62px);
+  }
+
+  /* Hide desktop resizer */
+
+  .resizer {
+    display: none;
+  }
+
+  /* AI section */
+
+  .right {
+    flex: none !important;
+
+    width: 100%;
+    height: auto;
+
+    min-height: 45vh;
+
+    overflow: visible;
+  }
+
+  .ai {
+    min-height: 45vh;
+
+    padding: 18px;
+
+    overflow: visible;
+  }
+
+  /* Button */
+
+  .review {
+    margin: 8px 10px 10px;
+
+    width: calc(100% - 20px);
+
+    padding: 14px;
+
+    font-size: 15px;
+  }
+
+  /* Empty state */
+
+  .empty {
+    min-height: 300px;
+
+    padding: 25px 15px;
+  }
+
+  .empty-icon {
+    font-size: 40px;
+  }
+
+  .empty h2 {
+    font-size: 20px;
+  }
+
+  .empty p {
+    font-size: 14px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+  .left {
+    height: 50vh;
+    min-height: 320px;
+  }
+
+  .right {
+    min-height: 50vh;
+  }
+
+  .ai {
+    padding: 14px;
+  }
+
+  .markdown {
+    font-size: 13px;
+  }
+
+  .review {
+    font-size: 14px;
+  }
 }
