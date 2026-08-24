@@ -97,4 +97,29 @@ async function generateContent(prompt) {
     }
 }
 
+async function generateChatReply(message, code, language) {
+    try {
+        const contextBlock = code
+            ? `\n\nHere is the user's current code (${language || 'unspecified language'}) for context:\n\`\`\`${(language || '').toLowerCase()}\n${code}\n\`\`\``
+            : '';
+
+        const promptText = `You are helping a developer in a chat. Answer their question clearly and concisely.${contextBlock}\n\nUser's question:\n${message}`;
+
+        const response = await ai.models.generateContent({
+            model: MODEL_NAME,
+            contents: promptText,
+            config: {
+                systemInstruction: systemInstruction,
+            },
+        });
+
+        console.log(response.text);
+        return response.text;
+    } catch (error) {
+        console.error('Error generating chat reply from Gemini API:', error);
+        throw error;
+    }
+}
+
 module.exports = generateContent;
+module.exports.generateChatReply = generateChatReply;
