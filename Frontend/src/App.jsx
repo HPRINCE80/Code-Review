@@ -3,7 +3,7 @@ import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 
-const API_URL = 'https://code-review-v9sh.onrender.com';
+const API_URL = 'https://editor-o66f.onrender.com';
 
 const languages = {
   'Auto Detect': 'plaintext',
