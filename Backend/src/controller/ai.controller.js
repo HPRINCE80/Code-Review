@@ -31,3 +31,4 @@ module.exports.chatWithAI = async (req, res) => {
     return res.status(500).send({ error: 'Failed to get AI response' });
   }
 };
+//con
